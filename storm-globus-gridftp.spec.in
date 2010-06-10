@@ -1,0 +1,82 @@
+#
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+#
+#        http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+#
+
+#
+# Authors: Vincenzo Vagnoni <vincenzo.vagnoni@bo.infn.it>
+#          Elisabetta Ronchieri <elisabetta.ronchieri@cnaf.infn.it>
+# Version info: $Id: $
+# Release: $Name: $
+#                                                                            # Revision history:
+# $Log: $
+#
+
+%define name         storm-globus-gridftp
+%define version      @VERSION@
+%define release      @STORM_FRONTEND_RELEASE_NUMBER@
+%define flavor       @GLOBUS_FLAVOR@
+%define builddir     $RPM_BUILD_DIR/%{name}-%{flavor}-%{version}
+#%define globusdir    @GLOBUS_LOCATION@
+#%define stormdir     @STORM_DIR@
+#%define glitedir     @GLITE_LOCATION@
+#%define gsoapdir     @GSOAP_DIR@
+#%define gsoapgsidir  @GSOAPGSI_DIR@
+#%define mysqldir     @MYSQL_DIR@
+#%define xmlrpccdir   @XMLRPC_C_DIR@
+%define prefix       @PREFIX@
+
+Name:           %{name}-%{flavor}
+Version:        %{version}
+Release:        %{release}
+#Vendor:         
+Packager:       storm@infn.it
+#Copyright:
+License:        Apache
+URL:            http://grid-it.cnaf.infn.it/storm
+Source:         @PACKAGE@-%{version}.tar.gz
+Group:          Application/gridftp
+AutoReqProv:    no
+#Requires:       curl >= 7.15.3
+#Requires:       xmlrpc-c >= 1.04
+#Requires:       CGSI_gSOAP_2.7-voms >= 1.2.1-2
+#BuildRoot:      /var/tmp/%{name}-%{version}
+Prefix:         %{prefix}
+Summary:        GridFTP2 DSI for StoRM
+
+%description
+GridFTP2 DSI for StoRM. Calculates checksum on the fly
+
+%prep
+%setup -n @PACKAGE@-%{version}
+
+%build
+./configure --prefix=%{prefix} --with-globus-location=%{globusdir} --with-globus-flavor=%{flavor} --with-glite-location=%{glitedir} --with-gsoap-dir=%{gsoapdir} --with-storm-dir=%{stormdir} --with-mysql-dir=%{mysqldir} --with-xmlrpc-c-dir=%{xmlrpccdir}
+./configure --prefix=%{prefix}
+make
+
+%install
+if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
+mkdir -p $RPM_BUILD_ROOT
+make install DESTDIR=$RPM_BUILD_ROOT
+mkdir -p $RPM_BUILD_ROOT/etc/init.d
+mv -f $RPM_BUILD_ROOT/%{prefix}/etc/init.d/globus-gridftp-storm $RPM_BUILD_ROOT/etc/init.d
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files
+%defattr(755,root,root)
+%{prefix}/etc/init.d/globus-gridftp-storm
+%defattr(-,root,root)
+%{prefix}/lib/libglobus_gridftp_server_StoRM_%{flavor}.so
