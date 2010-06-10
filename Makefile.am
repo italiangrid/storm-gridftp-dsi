@@ -15,10 +15,10 @@
 
 #
 # Authors: Elisabetta Ronchieri <elisabetta.ronchieri@cnaf.infn.it>
-# Version info: $Id: $
-# Release: $Name: $
+# Version info: $Id:  $
+# Release: $Name:  $
 #                                                                            # Revision history:
-# $Log: $
+# $Log:  $
 #
 
 EXTRA_DIST = LICENSE
@@ -32,13 +32,16 @@ SUBDIRS = src config
 ## Default flags to run aclocal
 ACLOCAL_AMFLAGS = -I project -I config
 
-SPEC_FILE = storm-gfrontend.spec
+CLEANFILES = storm-globus-gridftp.spec
+
+MAINTAINERCLEANFILES = Makefile.in
+
+SPEC_FILE = storm-globus-gridftp.spec
 
 RPM_DIRS = @RPM_DIR@/SOURCES @RPM_DIR@/SPECS @RPM_DIR@/BUILD @RPM_DIR@/RPMS @RPM_DIR@/SRPMS
 
-rpm: $(SPEC_FILE) 
-	dist \
-	/bin/mkdir -p $(RPM_DIRS) \
+rpm: dist
+	/bin/mkdir -p $(RPM_DIRS)
 	/bin/cp -u @PACKAGE@-@VERSION@.tar.gz @RPM_DIR@/SOURCES 
 	/bin/cp $(SPEC_FILE) @RPM_DIR@/SPECS 
 	cd $(RPM_SPEC_PATH); \

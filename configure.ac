@@ -23,10 +23,13 @@
 #
 
 AC_PREREQ(2.57)
-AC_INIT([StoRM globus gridftp], [1.0.2])
+AC_INIT([StoRM globus gridftp], [1.0.2], [vincenzo.vagnoni@bo.infn.it])
 AC_CONFIG_AUX_DIR([./project])
 AM_INIT_AUTOMAKE([1.6.3 subdir-objects])
 AC_CONFIG_SRCDIR([src/globus_gridftp_server_StoRM.c])
+
+# Release number
+AC_SUBST([STORM_GLOBUS_GRIDFTP_RELEASE_NUMBER], [1])
 
 # Notices.
 AC_COPYRIGHT([See LICENCE file for details])
@@ -35,6 +38,8 @@ AC_REVISION([$Revision: $])
 #Environment.
 WORKDIR=`pwd`
 AC_SUBST(WORKDIR)
+
+DEFAULT_RPM_DIR=`pwd`
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -68,13 +73,26 @@ AC_MSG_RESULT(["GLOBUS found $have_globus"])
 
 AM_CONDITIONAL([HAVE_GLOBUS], [test x$have_globus = xyes])
 
+# ========================================================================
+# RPM directory
+# ========================================================================
+AC_MSG_CHECKING([for RPM directory])
+if test -z $RPMD; then
+    RPMD=$DEFAULT_RPM_DIR
+fi
+if test ! \( -d $RPMD \); then
+    AC_MSG_ERROR([no such directory "$RPMD"])
+fi
+AC_MSG_RESULT(["$RMPD" found])
+AC_SUBST([RPM_DIR], [$RPMD])
+
 dnl Temporarily built with no optimisation
 
 dnl CXXFLAGS="-g -O0"
 dnl CFLAGS="-g -O0"
 
 # Configuration items
-AC_PREFIX_DEFAULT([/opt/glite])
+AC_PREFIX_DEFAULT([/opt/globus])
 AM_CONFIG_HEADER([src/autogen/config.h])
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([config/Makefile])

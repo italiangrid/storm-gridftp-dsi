@@ -24,17 +24,11 @@
 
 %define name         storm-globus-gridftp
 %define version      @VERSION@
-%define release      @STORM_FRONTEND_RELEASE_NUMBER@
-%define flavor       @GLOBUS_FLAVOR@
+%define release      @STORM_GLOBUS_GRIDFTP_RELEASE_NUMBER@
+%define flavor       @GLOBUS_NOTHR_FLAVOR@
 %define builddir     $RPM_BUILD_DIR/%{name}-%{flavor}-%{version}
-#%define globusdir    @GLOBUS_LOCATION@
-#%define stormdir     @STORM_DIR@
-#%define glitedir     @GLITE_LOCATION@
-#%define gsoapdir     @GSOAP_DIR@
-#%define gsoapgsidir  @GSOAPGSI_DIR@
-#%define mysqldir     @MYSQL_DIR@
-#%define xmlrpccdir   @XMLRPC_C_DIR@
-%define prefix       @PREFIX@
+%define globusdir    @GLOBUS_LOCATION@
+%define prefix       @prefix@
 
 Name:           %{name}-%{flavor}
 Version:        %{version}
@@ -61,8 +55,7 @@ GridFTP2 DSI for StoRM. Calculates checksum on the fly
 %setup -n @PACKAGE@-%{version}
 
 %build
-./configure --prefix=%{prefix} --with-globus-location=%{globusdir} --with-globus-flavor=%{flavor} --with-glite-location=%{glitedir} --with-gsoap-dir=%{gsoapdir} --with-storm-dir=%{stormdir} --with-mysql-dir=%{mysqldir} --with-xmlrpc-c-dir=%{xmlrpccdir}
-./configure --prefix=%{prefix}
+./configure --prefix=%{prefix} --with-globus-prefix=%{globusdir} --with-globus-flavor=%{flavor}
 make
 
 %install
@@ -80,3 +73,4 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/etc/init.d/globus-gridftp-storm
 %defattr(-,root,root)
 %{prefix}/lib/libglobus_gridftp_server_StoRM_%{flavor}.so
+%doc %{prefix}/share/doc/%{name}-%{version}/LICENSE

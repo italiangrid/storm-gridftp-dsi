@@ -22,10 +22,14 @@
 # $Log: $
 #
 
+EXTRA_DIST = dsi_StoRM.h
+
 OTHER_CFLAGS = -fPIC -D_LARGEFILE64_SOURCE -Wall -Werror
 
 MTC_CFLAGS = -pthread -DCTHREAD_POSIX -D_THREAD_SAFE -D_REENTRANT
 
+noinst_INCLUDES = dsi_StoRM.h
+ 
 lib_LTLIBRARIES = libglobus-gridftp-server-StoRM.la
 
 libglobus_gridftp_server_StoRM_la_SOURCES = \
