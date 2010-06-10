@@ -28,15 +28,20 @@ AC_CONFIG_AUX_DIR([./project])
 AM_INIT_AUTOMAKE([1.6.3 subdir-objects])
 AC_CONFIG_SRCDIR([src/globus_gridftp_server_StoRM.c])
 
+# Notices.
+AC_COPYRIGHT([See LICENCE file for details])
+AC_REVISION([$Revision: $])
+
 #Environment.
 WORKDIR=`pwd`
 AC_SUBST(WORKDIR)
 
 dnl Checks for programs.
-AC_PROG_AWK
 AC_PROG_CC
-AM_PROG_CC_C_O
+AC_PROG_CPP
 AC_PROG_CXX
+AC_PROG_CXXCPP
+AM_PROG_CC_C_O
 AC_PROG_LIBTOOL
 
 dnl Checks for libraries.
@@ -54,23 +59,23 @@ AC_TYPE_PID_T
 AC_HEADER_TIME
 
 dnl Checks for library functions.
-AC_CHECK_FUNCS(select socket strdup strerror bsearch vsnprintf)
+#AC_CHECK_FUNCS(select socket strdup strerror bsearch vsnprintf)
 
 have_globus=no
 
 AC_GLOBUS([], have_globus=yes, have_globus=no)
-
 AC_MSG_RESULT(["GLOBUS found $have_globus"])
 
 AM_CONDITIONAL([HAVE_GLOBUS], [test x$have_globus = xyes])
 
 dnl Temporarily built with no optimisation
 
-CXXFLAGS="-g -O0"
-CFLAGS="-g -O0"
+dnl CXXFLAGS="-g -O0"
+dnl CFLAGS="-g -O0"
 
 # Configuration items
 AC_PREFIX_DEFAULT([/opt/glite])
+AM_CONFIG_HEADER([src/autogen/config.h])
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([config/Makefile])
 AC_CONFIG_FILES([src/Makefile])

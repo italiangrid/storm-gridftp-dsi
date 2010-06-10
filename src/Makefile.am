@@ -22,22 +22,23 @@
 # $Log: $
 #
 
+OTHER_CFLAGS = -fPIC -D_LARGEFILE64_SOURCE -Wall -Werror
+
 MTC_CFLAGS = -pthread -DCTHREAD_POSIX -D_THREAD_SAFE -D_REENTRANT
 
-INCLUDES = -I$(top_srcdir)/src/\
-    @GLOBUS_THR_CFLAGS@
+lib_LTLIBRARIES = libglobus-gridftp-server-StoRM.la
 
-
-lib_LTLIBRARIES = globus_gridftp_server_StoRM.la
-
-globus_gridftp_server_StoRM_la_SOURCES = \
+libglobus_gridftp_server_StoRM_la_SOURCES = \
     globus_gridftp_server_StoRM.c
-globus_gridftp_server_StoRM_la_CFLAGS = $(MTC_CFLAGS)
-globus_gridftp_server_StoRM_la_LDFLAGS = \
+libglobus_gridftp_server_StoRM_la_LDFLAGS = \
     -L$(GLOBUS_LOCATION)/lib
-globus_gridftp_server_StoRM_la_LIBADD = \
+libglobus_gridftp_server_StoRM_la_LIBADD = \
     @GLOBUS_FTP_CONTROL_NOTHR_LIBS@ \
-    -shared -lz \
-    $(MOPTION)
+    -lz
+
+AM_CPPFLAGS = $(OTHER_CFLAGS) \
+    $(MTC_CFLAGS) \
+    -I$(top_srcdir)/src/ \
+    @GLOBUS_NOTHR_CFLAGS@
     
 MAINTAINERCLEANFILES = Makefile.in    

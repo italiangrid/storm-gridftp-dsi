@@ -34,21 +34,20 @@ ACLOCAL_AMFLAGS = -I project -I config
 
 SPEC_FILE = storm-gfrontend.spec
 
-RPM_DIRS = @RPM_DIR@/SOURCES @RPM_DIR@/SPECS @RPM_DIR@/BUILD @RPM_DIR@/RPM
-S @RPM_DIR@/SRPMS
+RPM_DIRS = @RPM_DIR@/SOURCES @RPM_DIR@/SPECS @RPM_DIR@/BUILD @RPM_DIR@/RPMS @RPM_DIR@/SRPMS
 
-rpm: $(SPEC_FILE) \
-	dist
-	/bin/mkdir -p $(RPM_DIRS)
-	/bin/cp -u @PACKAGE@-@VERSION@.tar.gz @RPM_DIR@/SOURCES
-	/bin/cp $(SPEC_FILE) @RPM_DIR@/SPECS
+rpm: $(SPEC_FILE) 
+	dist \
+	/bin/mkdir -p $(RPM_DIRS) \
+	/bin/cp -u @PACKAGE@-@VERSION@.tar.gz @RPM_DIR@/SOURCES 
+	/bin/cp $(SPEC_FILE) @RPM_DIR@/SPECS 
 	cd $(RPM_SPEC_PATH); \
 	/usr/bin/rpmbuild  --define "_topdir @RPM_DIR@" -ba @RPM_DIR@/SPECS/$(SPEC_FILE)
 
 stage:
 	@set fnord $(MAKEFLAGS); amf=$$2; \
 	dot_seen=no; \
-        target="install"; \
+       	target="install"; \
 	prefix_arg="@prefix@"; \
         list='$(SUBDIRS)'; for subdir in $$list; do \
           echo "Making $$target $$prefix_arg in $$subdir"; \
@@ -70,7 +69,7 @@ distsrc: dist
 
 distbin:
 	@set fnord $(MAKEFLAGS); amf=$$2; \
-        dot_seen=no; \
+	dot_seen=no; \
         target="install"; \
 	tmpdistbin="$(WORKDIR)/dist_bin"; \
         prefix_arg="prefix=$$tmpdistbin"; \
@@ -82,10 +81,10 @@ distbin:
           else \
             local_target="$$target"; \
           fi; \
-          (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target $$prefix_arg) \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target $$prefix_arg) \
            || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
         done; \
-        if test "$$dot_seen" = "no"; then \
+	if test "$$dot_seen" = "no"; then \
           $(MAKE) $(AM_MAKEFLAGS) "$$target-am" $$prefix_arg || exit 1; \
         fi; test -z "$$fail"; \
 	pushd $$tmpdistbin; \

@@ -1,6 +1,10 @@
 #if !defined(DSI_STORM_H)
 #define DSI_STORM_H
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include "globus_gridftp_server.h"
 
 typedef struct checksum_block_list_s 

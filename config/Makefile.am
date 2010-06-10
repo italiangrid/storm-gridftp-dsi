@@ -24,7 +24,7 @@
 EXTRA_DIST = globus-gridftp-storm
 
 gdsidir = $(sysconfdir)/init.d
-gdsi_SCRIPTS = glite-gridftp-storm
+gdsi_SCRIPTS = globus-gridftp-storm
 
 CLEANFILES = 
 
