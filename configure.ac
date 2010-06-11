@@ -66,6 +66,8 @@ AC_HEADER_TIME
 dnl Checks for library functions.
 #AC_CHECK_FUNCS(select socket strdup strerror bsearch vsnprintf)
 
+AC_STORM([])
+
 have_globus=no
 
 AC_GLOBUS([], have_globus=yes, have_globus=no)
@@ -77,7 +79,6 @@ if test "x$host_cpu" = "xx86_64"; then
     AC_SUBST([libdir], ['${exec_prefix}/lib64'])
     libtype='lib64'
 fi
-
 
 if test -h /usr/lib64 ; then
     libdir='${exec_prefix}/lib'
@@ -117,7 +118,7 @@ dnl CXXFLAGS="-g -O0"
 dnl CFLAGS="-g -O0"
 
 # Configuration items
-AC_PREFIX_DEFAULT([/opt/globus])
+AC_PREFIX_DEFAULT([/opt/storm/gridftp])
 AM_CONFIG_HEADER([src/autogen/config.h])
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([config/Makefile])
