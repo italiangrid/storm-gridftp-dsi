@@ -73,6 +73,25 @@ AC_MSG_RESULT(["GLOBUS found $have_globus"])
 
 AM_CONDITIONAL([HAVE_GLOBUS], [test x$have_globus = xyes])
 
+if test "x$host_cpu" = "xx86_64"; then
+    AC_SUBST([libdir], ['${exec_prefix}/lib64'])
+    libtype='lib64'
+fi
+
+
+if test -h /usr/lib64 ; then
+    libdir='${exec_prefix}/lib'
+    libtype='lib'
+fi
+
+if ! test -e /usr/lib64 ; then
+    libdir='${exec_prefix}/lib'
+    libtype='lib'
+fi
+
+AC_SUBST([LIBTYPE], [$libtype])
+
+
 # ========================================================================
 # RPM directory
 # ========================================================================
