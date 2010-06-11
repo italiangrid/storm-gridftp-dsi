@@ -85,3 +85,9 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/%{libtype}/libglobus-gridftp-server-StoRM.so.0
 %{prefix}/%{libtype}/libglobus-gridftp-server-StoRM.so.0.0.0
 %doc %{prefix}/share/doc/%{name}-%{version}/LICENSE
+
+%changelog
+* Fri June 11 2010 Elisabetta Roncheiri
+- Changed the structure of the component
+- Adopted autotool
+- Introduced checks for architecture and location of rpm dir

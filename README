@@ -2,10 +2,6 @@
 *   Author: Elisabetta Ronchieri, Elisabetta.Ronchieri@cnaf.infn.it
 *   Date:   10 June 2010
 *
-*   NOTE: The StoRM globus-gridftp-dsi was written reusing
-*         the software developed at CERN by CASTOR Team for gridftp package.
-*         *** Special thanks to , CERN CASTOR. ***
-*
 
 Prerequisites
 =============
@@ -17,10 +13,9 @@ Globus
 
 Building StoRM gridftp-dsi
 ==========================
+./bootstrap
 
+./configure --with-globus-nothr-flavor=<globus-flavor> --with-globus-prefix=<globus-location> --prefix=<prefix>
 
-
-Plugin Configuration
-====================
-
+make; make install; make rpm
 
