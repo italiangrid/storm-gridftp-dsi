@@ -22,39 +22,45 @@
 # $Log: $
 #
 
-%define name         storm-globus-gridftp
+%define name         @PACKAGE@
 %define version      @VERSION@
 %define release      @STORM_GLOBUS_GRIDFTP_RELEASE_NUMBER@
 %define flavor       @GLOBUS_NOTHR_FLAVOR@
-%define builddir     $RPM_BUILD_DIR/%{name}-%{flavor}-%{version}
+%define builddir     @RPM_BUILD_DIR@/build-%{name}-%{version}
 %define globusdir    @GLOBUS_LOCATION@
-%define prefix       @prefix@
+#%define prefix       @prefix@
 
-Name:           %{name}-%{flavor}
+Summary:        GridFTP2 DSI for StoRM
+Name:           %{name}
 Version:        %{version}
 Release:        %{release}
 #Vendor:         
-Packager:       storm@infn.it
 #Copyright:
 License:        Apache
 URL:            http://grid-it.cnaf.infn.it/storm
 Source:         @PACKAGE@-%{version}.tar.gz
 Group:          Application/gridftp
 AutoReqProv:    no
-#Requires:       curl >= 7.15.3
-#Requires:       xmlrpc-c >= 1.04
-#Requires:       CGSI_gSOAP_2.7-voms >= 1.2.1-2
-#BuildRoot:      /var/tmp/%{name}-%{version}
-Prefix:         %{prefix}
-Summary:        GridFTP2 DSI for StoRM
+BuildRoot:      %{builddir}
+Packager:       Elisabetta Ronchieri elisabetta.ronchieri@cnaf.infn.it
+Prefix:         /opt/globus
 
 %description
-GridFTP2 DSI for StoRM. Calculates checksum on the fly
+GridFTP2 DSI for StoRM. Calculates checksum on the fly.
+
+%package %{flavor}
+Summary: GridFTP2 DSI for StoRM for %{flavor}
+Group: Application/gridftp
+
+%description %{flavor}
+GridFTP2 DSI for StoRM. Calculates checksum on the fly.
 
 %prep
+
 %setup -n @PACKAGE@-%{version}
 
 %build
+./bootstrap
 ./configure --prefix=%{prefix} --with-globus-prefix=%{globusdir} --with-globus-nothr-flavor=%{flavor}
 make
 
@@ -62,15 +68,19 @@ make
 if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
 mkdir -p $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/etc/init.d
+mkdir -p $RPM_BUILD_ROOT/etc/init.d 
 mv -f $RPM_BUILD_ROOT/%{prefix}/etc/init.d/globus-gridftp-storm $RPM_BUILD_ROOT/etc/init.d
+rm -f $RPM_BUILD_ROOT/%{prefix}/lib/libglobus-gridftp-server-StoRM.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files
+%files %{flavor}
 %defattr(755,root,root)
-%{prefix}/etc/init.d/globus-gridftp-storm
+/etc/init.d/globus-gridftp-storm
 %defattr(-,root,root)
-%{prefix}/lib/libglobus_gridftp_server_StoRM_%{flavor}.so
+%{prefix}/lib/libglobus-gridftp-server-StoRM.a
+%{prefix}/lib/libglobus-gridftp-server-StoRM.so
+%{prefix}/lib/libglobus-gridftp-server-StoRM.so.0
+%{prefix}/lib/libglobus-gridftp-server-StoRM.so.0.0.0
 %doc %{prefix}/share/doc/%{name}-%{version}/LICENSE

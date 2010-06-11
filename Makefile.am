@@ -21,7 +21,10 @@
 # $Log:  $
 #
 
-EXTRA_DIST = LICENSE
+EXTRA_DIST = \
+    bootstrap \
+    LICENSE \
+    storm-globus-gridftp.spec.in
 
 docdir = $(datadir)/doc/@PACKAGE@-@VERSION@
 doc_DATA = LICENSE
@@ -38,14 +41,21 @@ MAINTAINERCLEANFILES = Makefile.in
 
 SPEC_FILE = storm-globus-gridftp.spec
 
-RPM_DIRS = @RPM_DIR@/SOURCES @RPM_DIR@/SPECS @RPM_DIR@/BUILD @RPM_DIR@/RPMS @RPM_DIR@/SRPMS
+RPM_MAIN_DIR = @RPM_DIR@/rpm
+RPM_TMP_DIR = $(RPM_MAIN_DIR)/tmp
+RPM_SOURCE = $(RPM_MAIN_DIR)/SOURCES
+RPM_SPEC = $(RPM_MAIN_DIR)/SPECS
+RPM_BUILD = $(RPM_MAIN_DIR)/BUILD
+RPM_RPM = $(RPM_MAIN_DIR)/RPMS
+RPM_SRPM = $(RPM_MAIN_DIR)/SRPMS
+RPM_DIRS = $(RPM_MAIN_DIR) $(RPM_SOURCE) $(RPM_SPEC) $(RPM_BUILD) $(RPM_RPM) $(RPM_SRPM)
 
 rpm: dist
 	/bin/mkdir -p $(RPM_DIRS)
-	/bin/cp -u @PACKAGE@-@VERSION@.tar.gz @RPM_DIR@/SOURCES 
-	/bin/cp $(SPEC_FILE) @RPM_DIR@/SPECS 
-	cd $(RPM_SPEC_PATH); \
-	/usr/bin/rpmbuild  --define "_topdir @RPM_DIR@" -ba @RPM_DIR@/SPECS/$(SPEC_FILE)
+	/bin/cp -u @PACKAGE@-@VERSION@.tar.gz $(RPM_SOURCE)
+	/bin/cp $(SPEC_FILE) $(RPM_SPEC)
+	cd $(RPM_SPEC); \
+	/usr/bin/rpmbuild  --define "_topdir $(RPM_MAIN_DIR)" -ba $(RPM_SPEC)/$(SPEC_FILE)
 
 stage:
 	@set fnord $(MAKEFLAGS); amf=$$2; \
