@@ -55,7 +55,7 @@ GridFTP2 DSI for StoRM. Calculates checksum on the fly
 %setup -n @PACKAGE@-%{version}
 
 %build
-./configure --prefix=%{prefix} --with-globus-prefix=%{globusdir} --with-globus-flavor=%{flavor}
+./configure --prefix=%{prefix} --with-globus-prefix=%{globusdir} --with-globus-nothr-flavor=%{flavor}
 make
 
 %install
