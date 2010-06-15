@@ -23,13 +23,13 @@
 #
 
 AC_PREREQ(2.57)
-AC_INIT([StoRM globus gridftp], [1.0.2], [vincenzo.vagnoni@bo.infn.it])
+AC_INIT([StoRM globus gridftp], [1.0.3], [vincenzo.vagnoni@bo.infn.it])
 AC_CONFIG_AUX_DIR([./project])
 AM_INIT_AUTOMAKE([1.6.3 subdir-objects])
 AC_CONFIG_SRCDIR([src/globus_gridftp_server_StoRM.c])
 
 # Release number
-AC_SUBST([STORM_GLOBUS_GRIDFTP_RELEASE_NUMBER], [3])
+AC_SUBST([STORM_GLOBUS_GRIDFTP_RELEASE_NUMBER], [1])
 
 # Notices.
 AC_COPYRIGHT([See LICENCE file for details])

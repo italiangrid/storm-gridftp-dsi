@@ -24,7 +24,7 @@
 
 %define name         @PACKAGE@
 %define version      @VERSION@
-%define release      @STORM_GLOBUS_GRIDFTP_RELEASE_NUMBER@
+%define release      @STORM_GLOBUS_GRIDFTP_RELEASE_NUMBER@_storm
 %define flavor       @GLOBUS_NOTHR_FLAVOR@
 %define builddir     @RPM_BUILD_DIR@/build-%{name}-%{version}
 %define globusdir    @GLOBUS_LOCATION@
