@@ -29,7 +29,7 @@ AM_INIT_AUTOMAKE([1.6.3 subdir-objects])
 AC_CONFIG_SRCDIR([src/globus_gridftp_server_StoRM.c])
 
 # Release number
-AC_SUBST([STORM_GLOBUS_GRIDFTP_RELEASE_NUMBER], [1])
+AC_SUBST([STORM_GLOBUS_GRIDFTP_RELEASE_NUMBER], [3])
 
 # Notices.
 AC_COPYRIGHT([See LICENCE file for details])
@@ -122,6 +122,7 @@ AC_PREFIX_DEFAULT([/opt/storm/gridftp])
 AM_CONFIG_HEADER([src/autogen/config.h])
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([config/Makefile])
+AC_CONFIG_FILES([config/globus-gridftp-storm])
 AC_CONFIG_FILES([src/Makefile])
 AC_CONFIG_FILES([storm-globus-gridftp.spec])
 

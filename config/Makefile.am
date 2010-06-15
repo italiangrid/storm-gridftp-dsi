@@ -15,18 +15,18 @@
 
 #
 # Authors: Elisabetta Ronchieri <elisabetta.ronchieri@cnaf.infn.it>
-# Version info: $Id: $
-# Release: $Name: $
+# Version info: $Id:  $
+# Release: $Name:  $
 #                                                                            # Revision history:
-# $Log: $
+# $Log:  $
 #
 
-EXTRA_DIST = globus-gridftp-storm
+EXTRA_DIST = globus-gridftp-storm.in
 
 gdsidir = $(sysconfdir)/init.d
 gdsi_SCRIPTS = globus-gridftp-storm
 
-CLEANFILES = 
+CLEANFILES = globus-gridftp-storm
 
 MAINTAINERCLEANFILES = Makefile.in *~ *.*~
 
