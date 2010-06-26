@@ -29,7 +29,7 @@ AM_INIT_AUTOMAKE([1.6.3 subdir-objects])
 AC_CONFIG_SRCDIR([src/globus_gridftp_server_StoRM.c])
 
 # Release number
-AC_SUBST([STORM_GLOBUS_GRIDFTP_RELEASE_NUMBER], [1])
+AC_SUBST([STORM_GLOBUS_GRIDFTP_RELEASE_NUMBER], [2])
 
 # Notices.
 AC_COPYRIGHT([See LICENCE file for details])
@@ -67,30 +67,29 @@ dnl Checks for library functions.
 #AC_CHECK_FUNCS(select socket strdup strerror bsearch vsnprintf)
 
 AC_STORM([])
+AC_STORM_GRIDFTP([])
 
 have_globus=no
-
 AC_GLOBUS([], have_globus=yes, have_globus=no)
 AC_MSG_RESULT(["GLOBUS found $have_globus"])
-
 AM_CONDITIONAL([HAVE_GLOBUS], [test x$have_globus = xyes])
 
-if test "x$host_cpu" = "xx86_64"; then
-    AC_SUBST([libdir], ['${exec_prefix}/lib64'])
-    libtype='lib64'
-fi
+#if test "x$host_cpu" = "xx86_64"; then
+#    AC_SUBST([libdir], ['${exec_prefix}/lib64'])
+#    libtype='lib64'
+#fi
 
-if test -h /usr/lib64 ; then
-    libdir='${exec_prefix}/lib'
-    libtype='lib'
-fi
+#if test -h /usr/lib64 ; then
+#    libdir='${exec_prefix}/lib'
+#    libtype='lib'
+#fi
 
-if ! test -e /usr/lib64 ; then
-    libdir='${exec_prefix}/lib'
-    libtype='lib'
-fi
+#if ! test -e /usr/lib64 ; then
+#    libdir='${exec_prefix}/lib'
+#    libtype='lib'
+#fi
 
-AC_SUBST([LIBTYPE], [$libtype])
+#AC_SUBST([LIBTYPE], [$libtype])
 
 
 # ========================================================================

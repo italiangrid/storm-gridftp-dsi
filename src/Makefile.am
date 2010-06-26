@@ -30,19 +30,22 @@ MTC_CFLAGS = -pthread -DCTHREAD_POSIX -D_THREAD_SAFE -D_REENTRANT
 
 noinst_INCLUDES = dsi_StoRM.h
  
-lib_LTLIBRARIES = libglobus-gridftp-server-StoRM.la
+lib_LTLIBRARIES = libglobus-gridftp-server-StoRM-@GLOBUS_NOTHR_FLAVOR@.la
 
-libglobus_gridftp_server_StoRM_la_SOURCES = \
+libglobus_gridftp_server_StoRM_@GLOBUS_NOTHR_FLAVOR@_la_SOURCES = \
     globus_gridftp_server_StoRM.c
-libglobus_gridftp_server_StoRM_la_LDFLAGS = \
-    -L$(GLOBUS_LOCATION)/lib
-libglobus_gridftp_server_StoRM_la_LIBADD = \
+libglobus_gridftp_server_StoRM_@GLOBUS_NOTHR_FLAVOR@_la_LIBADD = \
     @GLOBUS_FTP_CONTROL_NOTHR_LIBS@ \
     -lz
-
-AM_CPPFLAGS = $(OTHER_CFLAGS) \
+libglobus_gridftp_server_StoRM_@GLOBUS_NOTHR_FLAVOR@_la_LDFLAGS = \
+    -rpath $(libdir)
+libglobus_gridftp_server_StoRM_@GLOBUS_NOTHR_FLAVOR@_la_CFLAGS = \
+    $(OTHER_CFLAGS) \
     $(MTC_CFLAGS) \
-    -I$(top_srcdir)/src/ \
-    @GLOBUS_NOTHR_CFLAGS@
+    @GLOBUS_NOTHR_CFLAGS@ \
+    $(API_INCLUDES)
+
+API_INCLUDES = \
+    -I$(top_srcdir)/src/
     
 MAINTAINERCLEANFILES = Makefile.in    

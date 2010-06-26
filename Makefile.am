@@ -24,7 +24,8 @@
 EXTRA_DIST = \
     bootstrap \
     LICENSE \
-    storm-globus-gridftp.spec.in
+    storm-globus-gridftp.spec.in \
+    project
 
 docdir = $(datadir)/doc/@PACKAGE@-@VERSION@
 doc_DATA = LICENSE
@@ -109,4 +110,4 @@ clean-local:
 	rm -f @PACKAGE@-@VERSION@.tar.gz
 
 distclean-local:
-	rm -rf $(RPM_DIRS)
+	rm -rf $(RPM_DIRS) project

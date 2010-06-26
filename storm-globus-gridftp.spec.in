@@ -71,7 +71,7 @@ mkdir -p $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/etc/init.d 
 mv -f $RPM_BUILD_ROOT/%{prefix}/etc/init.d/globus-gridftp-storm $RPM_BUILD_ROOT/etc/init.d
-rm -f $RPM_BUILD_ROOT/%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM.la
+rm -f $RPM_BUILD_ROOT/%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavor}.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -80,10 +80,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(755,root,root)
 /etc/init.d/globus-gridftp-storm
 %defattr(-,root,root)
-%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM.a
-%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM.so
-%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM.so.0
-%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM.so.0.0.0
+%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavor}.a
+%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavor}.so
+%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavor}.so.0
+%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavor}.so.0.0.0
 %doc %{prefix}/share/doc/%{name}-%{version}/LICENSE
 
 %changelog
