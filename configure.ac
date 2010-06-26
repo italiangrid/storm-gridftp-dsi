@@ -43,11 +43,15 @@ DEFAULT_RPM_DIR=`pwd`
 
 dnl Checks for programs.
 AC_PROG_CC
-AC_PROG_CPP
-AC_PROG_CXX
-AC_PROG_CXXCPP
-AM_PROG_CC_C_O
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
+AM_PROG_CC_C_O
+AC_PROG_INSTALL
+
+# Checks for libraries.
+# dlopen library
+AC_CHECK_LIB([dl], [dlopen])
 
 dnl Checks for libraries.
 dnl Replace `main' with a function in -lpthread:
