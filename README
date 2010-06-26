@@ -19,3 +19,6 @@ Building StoRM gridftp-dsi
 
 make; make install; make rpm
 
+For example:
+
+./configure --with-globus-nothr-flavor=gcc64dbg --with-globus-prefix=/home/joda/gliteOnETICS/repository/vdt/globus/4.0.7-VDT-1.10.1/sl5_x86_64_gcc412 --prefix=/home/joda/testgridft
