@@ -110,4 +110,4 @@ clean-local:
 	rm -f @PACKAGE@-@VERSION@.tar.gz
 
 distclean-local:
-	rm -rf $(RPM_DIRS) project *.in
+	rm -rf $(RPM_DIRS) project 
