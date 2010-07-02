@@ -20,7 +20,11 @@
 # $Log:  $
 #
 
-SUBDIRS = init.d logrotate.d
+EXTRA_DIST = globus-gridftp.in
+
+gdsidir = $(sysconfdir)/logrotate.d
+gdsi_SCRIPTS = globus-gridftp
+
+CLEANFILES = globus-gridftp
 
 MAINTAINERCLEANFILES = Makefile.in *~ *.*~
-

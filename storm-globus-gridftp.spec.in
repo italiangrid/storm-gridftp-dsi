@@ -70,7 +70,9 @@ if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
 mkdir -p $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/etc/init.d 
-mv -f $RPM_BUILD_ROOT/%{prefix}/etc/init.d/globus-gridftp-storm $RPM_BUILD_ROOT/etc/init.d
+mkdir -p $RPM_BUILD_ROOT/etc/logrotate.d
+cp -f $RPM_BUILD_ROOT/%{prefix}/etc/init.d/globus-gridftp $RPM_BUILD_ROOT/etc/init.d
+cp -f $RPM_BUILD_ROOT/%{prefix}/etc/logrotate.d/globus-gridftp $RPM_BUILD_ROOT/etc/logrotate.d
 rm -f $RPM_BUILD_ROOT/%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavor}.la
 
 %clean
@@ -78,8 +80,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files %{flavor}
 %defattr(755,root,root)
-/etc/init.d/globus-gridftp-storm
+/etc/init.d/globus-gridftp
+%{prefix}/etc/init.d/globus-gridftp
 %defattr(-,root,root)
+/etc/logrotate.d/globus-gridftp
+%{prefix}/etc/logrotate.d/globus-gridftp
 %{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavor}.a
 %{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavor}.so
 %{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavor}.so.0
@@ -87,6 +92,11 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{prefix}/share/doc/%{name}-%{version}/LICENSE
 
 %changelog
+* Fri Jul 07 2010 Elisabetta Roncheiri
+- Renamed start up script
+- Added logrotate script
+- Updated handling of library
+
 * Fri Jun 11 2010 Elisabetta Roncheiri
 - Changed the structure of the component
 - Adopted autotool

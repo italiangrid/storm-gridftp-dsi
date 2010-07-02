@@ -17,10 +17,16 @@
 # Authors: Elisabetta Ronchieri <elisabetta.ronchieri@cnaf.infn.it>
 # Version info: $Id:  $
 # Release: $Name:  $
+#                                                                            # Revision history:
 # $Log:  $
 #
 
-SUBDIRS = init.d logrotate.d
+EXTRA_DIST = globus-gridftp.in
+
+gdsidir = $(sysconfdir)/init.d
+gdsi_SCRIPTS = globus-gridftp
+
+CLEANFILES = globus-gridftp
 
 MAINTAINERCLEANFILES = Makefile.in *~ *.*~
 
