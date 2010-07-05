@@ -59,6 +59,13 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$STORM_GRIDFTP_LOCATION/lib:$GLOBUS_LOCA
 # check if executable exists
 [ -x $GLOBUS_LOCATION/sbin/$prog ] || exit 0
 
+
+if [ -z $STORM_USE_DSI ] || [ "x{STORM_USE_DSI}" == "xno"]; then
+    STORM_GRIDFTP_DSI=""
+else
+    STORM_GRIDFTP_DSI="-dsi StoRM -allowed-modules StoRM"
+fi
+
 case $1 in
  start)
       echo -n "Starting $prog"   
@@ -67,7 +74,7 @@ case $1 in
         -d ${GRIDFTP_LOG_LEVELS:-error,warn,info} \
         -l ${GRIDFTP_SESSION_LOG:-/var/log/gridftp-session.log} \
         -Z ${GRIDFTP_TRANSFER_LOG:-/var/log/globus-gridftp.log} \
-        -dsi StoRM -allowed-modules StoRM'"
+        ${STORM_GRIDFTP_DSI}'"
       RETVAL=$?
       echo
       exit $RETVAL
