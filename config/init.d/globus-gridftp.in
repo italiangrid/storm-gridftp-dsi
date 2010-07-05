@@ -60,7 +60,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$STORM_GRIDFTP_LOCATION/lib:$GLOBUS_LOCA
 [ -x $GLOBUS_LOCATION/sbin/$prog ] || exit 0
 
 
-if [ -z $STORM_USE_DSI ] || [ "x{STORM_USE_DSI}" == "xno"]; then
+if [ "x{STORM_USE_DSI}" == "xno"]; then
     STORM_GRIDFTP_DSI=""
 else
     STORM_GRIDFTP_DSI="-dsi StoRM -allowed-modules StoRM"
