@@ -24,7 +24,7 @@
 
 EXTRA_DIST = dsi_StoRM.h
 
-OTHER_CFLAGS = -fPIC -D_LARGEFILE64_SOURCE -Wall -Werror
+OTHER_CFLAGS = -fPIC -DPIC -D_LARGEFILE64_SOURCE -Wall -Werror
 MTC_CFLAGS = -pthread -DCTHREAD_POSIX -D_THREAD_SAFE -D_REENTRANT
 
 noinst_INCLUDES = dsi_StoRM.h
@@ -37,7 +37,7 @@ libglobus_gridftp_server_StoRM_@GLOBUS_NOTHR_FLAVOR@_la_LIBADD = \
     @GLOBUS_FTP_CONTROL_NOTHR_LIBS@ \
     -lz -ldl
 libglobus_gridftp_server_StoRM_@GLOBUS_NOTHR_FLAVOR@_la_LDFLAGS = \
-    -rpath $(libdir)
+    -shared -rpath $(libdir)
 libglobus_gridftp_server_StoRM_@GLOBUS_NOTHR_FLAVOR@_la_CPPFLAGS = \
     $(OTHER_CFLAGS) \
     $(MTC_CFLAGS) \
