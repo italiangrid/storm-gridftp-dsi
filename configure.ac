@@ -78,6 +78,20 @@ AC_GLOBUS([], have_globus=yes, have_globus=no)
 AC_MSG_RESULT(["GLOBUS found $have_globus"])
 AM_CONDITIONAL([HAVE_GLOBUS], [test x$have_globus = xyes])
 
+have_libattr_devel=no
+
+AC_LIBATTR([])
+AC_LIBATTR_DEVEL([], have_libattr_devel=yes, have_libattr_devel=no)
+AC_MSG_RESULT(["LIBATTR found"])
+AC_MSG_RESULT(["LIBATTR_DEVEL found $have_libattr_devel"])
+
+have_zlib_devel=no
+
+AC_ZLIB([])
+AC_ZLIB_DEVEL([], have_zlib_devel=yes, have_zlib_devel=no)
+AC_MSG_RESULT(["ZLIB found"])
+AC_MSG_RESULT(["ZLIB_DEVEL found $have_zlib_devel"])
+
 #if test "x$host_cpu" = "xx86_64"; then
 #    AC_SUBST([libdir], ['${exec_prefix}/lib64'])
 #    libtype='lib64'

@@ -35,13 +35,16 @@ libglobus_gridftp_server_StoRM_@GLOBUS_NOTHR_FLAVOR@_la_SOURCES = \
     globus_gridftp_server_StoRM.c
 libglobus_gridftp_server_StoRM_@GLOBUS_NOTHR_FLAVOR@_la_LIBADD = \
     @GLOBUS_FTP_CONTROL_NOTHR_LIBS@ \
-    -lz -ldl
+    @ZLIB_DEVEL_LIBS@ \
+    -ldl
 libglobus_gridftp_server_StoRM_@GLOBUS_NOTHR_FLAVOR@_la_LDFLAGS = \
     -shared -rpath $(libdir)
 libglobus_gridftp_server_StoRM_@GLOBUS_NOTHR_FLAVOR@_la_CPPFLAGS = \
     $(OTHER_CFLAGS) \
     $(MTC_CFLAGS) \
     @GLOBUS_NOTHR_CFLAGS@ \
+    @LIBATTR_DEVEL_CFLAGS@ \
+    @ZLIB_DEVEL_CFLAGS@ \
     $(API_INCLUDES)
 
 API_INCLUDES = \
