@@ -100,10 +100,10 @@ unsigned long  adler32_combine_(unsigned int adler1, unsigned int adler2, globus
     MOD(sum2);
     sum1 += (adler2 & 0xffff) + BASE - 1;
     sum2 += ((adler1 >> 16) & 0xffff) + ((adler2 >> 16) & 0xffff) + BASE - rem;
-    if (sum1 > BASE) sum1 -= BASE;
-    if (sum1 > BASE) sum1 -= BASE;
-    if (sum2 > (BASE << 1)) sum2 -= (BASE << 1);
-    if (sum2 > BASE) sum2 -= BASE;
+    if (sum1 >= BASE) sum1 -= BASE;
+    if (sum1 >= BASE) sum1 -= BASE;
+    if (sum2 >= (BASE << 1)) sum2 -= (BASE << 1);
+    if (sum2 >= BASE) sum2 -= BASE;
     return sum1 | (sum2 << 16);
 }
 
@@ -720,3 +720,4 @@ static int globus_l_gfs_StoRM_deactivate(void) {
     GLOBUS_GFS_DSI_REGISTRY, "StoRM");
     return 0;
 }
+
