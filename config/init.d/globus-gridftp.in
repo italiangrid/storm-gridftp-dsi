@@ -65,14 +65,13 @@ else
     STORM_GRIDFTP_DSI="-dsi StoRM -allowed-modules StoRM"
 fi
 
-if [ "x${STORM_GRIDFTP_DSI}" != "x" ]; then
-    LD_LIBRARY_PATH+=:$STORM_GRIDFTP_DSI_LOCATION/@LIBTYPE@
-fi
-
-export LD_LIBRARY_PATH
-
 case $1 in
  start)
+      if [ "x${STORM_GRIDFTP_DSI}" != "x" ]; then
+          LD_LIBRARY_PATH+=:$STORM_GRIDFTP_DSI_LOCATION/@LIBTYPE@
+      fi
+      export LD_LIBRARY_PATH
+
       echo -n "Starting $prog"   
       daemon sh -c "'umask $umask; \
         exec $GLOBUS_LOCATION/sbin/$prog -p 2811 -S \
