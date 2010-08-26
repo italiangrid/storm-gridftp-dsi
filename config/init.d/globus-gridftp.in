@@ -54,7 +54,7 @@ if [ -f "$GLITE_ENVSCRIPT" ]; then
     . "$GLITE_ENVSCRIPT"
 fi
 
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$STORM_GRIDFTP_DSI_LOCATION/@LIBTYPE@:$GLOBUS_LOCATION/lib
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GLOBUS_LOCATION/lib
 
 # check if executable exists
 [ -x $GLOBUS_LOCATION/sbin/$prog ] || exit 0
@@ -64,6 +64,12 @@ if [ -z "$GRIDFTP_WITH_DSI" ] || [ "x${GRIDFTP_WITH_DSI}" == "xno" ]; then
 else
     STORM_GRIDFTP_DSI="-dsi StoRM -allowed-modules StoRM"
 fi
+
+if [ "x${STORM_GRIDFTP_DSI}" != "x" ]; then
+    LD_LIBRARY_PATH+=:$STORM_GRIDFTP_DSI_LOCATION/@LIBTYPE@
+fi
+
+export LD_LIBRARY_PATH
 
 case $1 in
  start)
