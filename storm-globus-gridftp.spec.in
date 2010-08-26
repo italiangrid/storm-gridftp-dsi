@@ -83,7 +83,7 @@ mkdir -p $RPM_BUILD_ROOT/etc/init.d
 mkdir -p $RPM_BUILD_ROOT/etc/logrotate.d
 cp -f $RPM_BUILD_ROOT/%{prefix}/etc/init.d/globus-gridftp $RPM_BUILD_ROOT/etc/init.d
 cp -f $RPM_BUILD_ROOT/%{prefix}/etc/logrotate.d/globus-gridftp $RPM_BUILD_ROOT/etc/logrotate.d
-rm -f $RPM_BUILD_ROOT/%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavornothr}.la
+rm -f $RPM_BUILD_ROOT/%{prefix}/%{libtype}/libglobus_gridftp_server_StoRM_%{flavornothr}.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -95,10 +95,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 /etc/logrotate.d/globus-gridftp
 %{prefix}/etc/logrotate.d/globus-gridftp
-%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavornothr}.a
-%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavornothr}.so
-%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavornothr}.so.0
-%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavornothr}.so.0.0.0
+%{prefix}/%{libtype}/libglobus_gridftp_server_StoRM_%{flavornothr}.a
+%{prefix}/%{libtype}/libglobus_gridftp_server_StoRM_%{flavornothr}.so
+%{prefix}/%{libtype}/libglobus_gridftp_server_StoRM_%{flavornothr}.so.0
+%{prefix}/%{libtype}/libglobus_gridftp_server_StoRM_%{flavornothr}.so.0.0.0
 %doc %{prefix}/share/doc/%{name}-%{version}/LICENSE
 
 %changelog

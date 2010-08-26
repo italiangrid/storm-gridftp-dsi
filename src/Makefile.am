@@ -29,7 +29,7 @@ MTC_CFLAGS = -pthread -DCTHREAD_POSIX -D_THREAD_SAFE -D_REENTRANT
 
 noinst_INCLUDES = dsi_StoRM.h
  
-lib_LTLIBRARIES = libglobus-gridftp-server-StoRM-@GLOBUS_NOTHR_FLAVOR@.la
+lib_LTLIBRARIES = libglobus_gridftp_server_StoRM_@GLOBUS_NOTHR_FLAVOR@.la
 
 libglobus_gridftp_server_StoRM_@GLOBUS_NOTHR_FLAVOR@_la_SOURCES = \
     globus_gridftp_server_StoRM.c
