@@ -15,11 +15,6 @@
 
 #
 # Authors: Elisabetta Ronchieri <elisabetta.ronchieri@cnaf.infn.it>
-# Version info: $Id: $
-# Release: $Name: $
-#
-# Revision history:
-# $Log: $
 #
 
 EXTRA_DIST = dsi_StoRM.h

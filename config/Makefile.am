@@ -15,9 +15,6 @@
 
 #
 # Authors: Elisabetta Ronchieri <elisabetta.ronchieri@cnaf.infn.it>
-# Version info: $Id:  $
-# Release: $Name:  $
-# $Log:  $
 #
 
 SUBDIRS = init.d logrotate.d

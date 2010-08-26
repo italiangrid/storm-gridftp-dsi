@@ -15,10 +15,6 @@
 
 #
 # Authors: Elisabetta Ronchieri <elisabetta.ronchieri@cnaf.infn.it>
-# Version info: $Id:  $
-# Release: $Name:  $
-#                                                                            # Revision history:
-# $Log:  $
 #
 
 EXTRA_DIST = globus-gridftp.in
