@@ -35,12 +35,12 @@ if [ -n "$GLOBUS_UDP_PORT_RANGE" ]; then
   export GLOBUS_UDP_PORT_RANGE
 fi
 
-STORM_GRIDFTP_LOCATION=${STORM_GRIDFTP_LOCATION:-@prefix@}
-if [ ! -d "$STORM_GRIDFTP_LOCATION" ]; then
-  echo "STORM_GRIDFTP_LOCATION not found"
+STORM_GRIDFTP_DSI_LOCATION=${STORM_GRIDFTP_DSI_LOCATION:-/opt/storm/gridftp}
+if [ ! -d "$STORM_GRIDFTP_DSI_LOCATION" ]; then
+  echo "STORM_GRIDFTP_DSI_LOCATION not found"
   exit 1
 fi
-export GLOBUS_LOCATION
+export STORM_GRIDFTP_DSI_LOCATION
 
 ###############
 
@@ -54,13 +54,12 @@ if [ -f "$GLITE_ENVSCRIPT" ]; then
     . "$GLITE_ENVSCRIPT"
 fi
 
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$STORM_GRIDFTP_LOCATION/lib:$GLOBUS_LOCATION/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$STORM_GRIDFTP_LOCATION/@LIBTYPE@:$GLOBUS_LOCATION/lib
 
 # check if executable exists
 [ -x $GLOBUS_LOCATION/sbin/$prog ] || exit 0
 
-
-if [ "x{STORM_USE_DSI}" == "xno"]; then
+if [ -z "$GRIDFTP_WITH_DSI" ] || [ "x${GRIDFTP_WITH_DSI}" == "xno" ]; then
     STORM_GRIDFTP_DSI=""
 else
     STORM_GRIDFTP_DSI="-dsi StoRM -allowed-modules StoRM"

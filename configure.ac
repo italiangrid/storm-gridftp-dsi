@@ -29,7 +29,9 @@ AM_INIT_AUTOMAKE([1.6.3 subdir-objects])
 AC_CONFIG_SRCDIR([src/globus_gridftp_server_StoRM.c])
 
 # Release number
-AC_SUBST([STORM_GLOBUS_GRIDFTP_RELEASE_NUMBER], [2])
+osdist=`cat /etc/redhat-release | awk 'BEGIN {FS="release "} {print $2}'| awk 'BEGIN {FS="."} {print $1}'`
+AC_SUBST([STORM_GLOBUS_GRIDFTP_SO], [sl$osdist])
+AC_SUBST([STORM_GLOBUS_GRIDFTP_AGE_NUMBER], [2])
 
 # Notices.
 AC_COPYRIGHT([See LICENCE file for details])
@@ -92,24 +94,6 @@ AC_ZLIB_DEVEL([], have_zlib_devel=yes, have_zlib_devel=no)
 AC_MSG_RESULT(["ZLIB found"])
 AC_MSG_RESULT(["ZLIB_DEVEL found $have_zlib_devel"])
 
-#if test "x$host_cpu" = "xx86_64"; then
-#    AC_SUBST([libdir], ['${exec_prefix}/lib64'])
-#    libtype='lib64'
-#fi
-
-#if test -h /usr/lib64 ; then
-#    libdir='${exec_prefix}/lib'
-#    libtype='lib'
-#fi
-
-#if ! test -e /usr/lib64 ; then
-#    libdir='${exec_prefix}/lib'
-#    libtype='lib'
-#fi
-
-#AC_SUBST([LIBTYPE], [$libtype])
-
-
 # ========================================================================
 # RPM directory
 # ========================================================================
@@ -128,11 +112,6 @@ AC_MSG_RESULT(["$RMPD" found])
 AC_MSG_RESULT(["$RMPBD" found])
 AC_SUBST([RPM_DIR], [$RPMD])
 AC_SUBST([RPM_BUILD_DIR], [$RPMBD])
-
-dnl Temporarily built with no optimisation
-
-dnl CXXFLAGS="-g -O0"
-dnl CFLAGS="-g -O0"
 
 # Configuration items
 AC_PREFIX_DEFAULT([/opt/storm/gridftp])

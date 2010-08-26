@@ -24,12 +24,22 @@
 
 %define name         @PACKAGE@
 %define version      @VERSION@
-%define release      @STORM_GLOBUS_GRIDFTP_RELEASE_NUMBER@_storm
-%define flavor       @GLOBUS_NOTHR_FLAVOR@
+%define release      @STORM_GLOBUS_GRIDFTP_AGE_NUMBER@.@STORM_GLOBUS_GRIDFTP_SO@
+
 %define builddir     @RPM_BUILD_DIR@/build-%{name}-%{version}
-%define globusdir    @GLOBUS_LOCATION@
+
 %define libtype      @LIBTYPE@
-#%define prefix       @prefix@
+%define globusdir    @GLOBUS_LOCATION@
+%define flavorthr    @GLOBUS_THR_FLAVOR@
+%define flavornothr  @GLOBUS_NOTHR_FLAVOR@
+
+%define libattrdir    @LIBATTR_LOCATION@
+%define libattrdevdir @LIBATTR_DEVEL_LOCATION@
+
+%define zlibdir @ZLIB_LOCATION@
+%define zlibdevdir @ZLIB_DEVEL_LOCATION@
+
+%define stormgridftpdir @STORM_GRIDFTP_LOCATION@
 
 Summary:        GridFTP2 DSI for StoRM
 Name:           %{name}
@@ -49,11 +59,11 @@ Prefix:         /opt/storm/gridftp
 %description
 GridFTP2 DSI for StoRM. Calculates checksum on the fly.
 
-%package %{flavor}
-Summary: GridFTP2 DSI for StoRM for %{flavor}
+%package %{flavornothr}
+Summary: GridFTP2 DSI for StoRM for %{flavornothr}
 Group: Application/gridftp
 
-%description %{flavor}
+%description %{flavornothr}
 GridFTP2 DSI for StoRM. Calculates checksum on the fly.
 
 %prep
@@ -62,7 +72,7 @@ GridFTP2 DSI for StoRM. Calculates checksum on the fly.
 
 %build
 ./bootstrap
-./configure --prefix=%{prefix} --with-globus-prefix=%{globusdir} --with-globus-nothr-flavor=%{flavor}
+./configure --prefix=%{prefix} --with-storm-gridftp-location=%{stormgridftpdir} --with-globus-prefix=%{globusdir} --with-globus-nothr-flavor=%{flavornothr} --with-globus-thr-flavor=%{flavorthr} --with-libattr-prefix=%{libattrdir} --with-libattr-devel-prefix=%{libattrdevdir} --with-zlib-prefix=%{zlibdir} --with-zlib-devel-prefix=%{zlibdevdir} 
 make
 
 %install
@@ -73,22 +83,22 @@ mkdir -p $RPM_BUILD_ROOT/etc/init.d
 mkdir -p $RPM_BUILD_ROOT/etc/logrotate.d
 cp -f $RPM_BUILD_ROOT/%{prefix}/etc/init.d/globus-gridftp $RPM_BUILD_ROOT/etc/init.d
 cp -f $RPM_BUILD_ROOT/%{prefix}/etc/logrotate.d/globus-gridftp $RPM_BUILD_ROOT/etc/logrotate.d
-rm -f $RPM_BUILD_ROOT/%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavor}.la
+rm -f $RPM_BUILD_ROOT/%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavornothr}.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files %{flavor}
+%files %{flavornothr}
 %defattr(755,root,root)
 /etc/init.d/globus-gridftp
 %{prefix}/etc/init.d/globus-gridftp
 %defattr(-,root,root)
 /etc/logrotate.d/globus-gridftp
 %{prefix}/etc/logrotate.d/globus-gridftp
-%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavor}.a
-%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavor}.so
-%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavor}.so.0
-%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavor}.so.0.0.0
+%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavornothr}.a
+%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavornothr}.so
+%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavornothr}.so.0
+%{prefix}/%{libtype}/libglobus-gridftp-server-StoRM-%{flavornothr}.so.0.0.0
 %doc %{prefix}/share/doc/%{name}-%{version}/LICENSE
 
 %changelog
