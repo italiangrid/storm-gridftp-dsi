@@ -56,11 +56,14 @@ BuildRoot:      %{builddir}
 Packager:       Elisabetta Ronchieri elisabetta.ronchieri@cnaf.infn.it
 Prefix:         /opt/storm/gridftp
 
+%define debug_package %{nil}
+
 %description
 GridFTP2 DSI for StoRM. Calculates checksum on the fly.
 
 %package %{flavornothr}
 Summary: GridFTP2 DSI for StoRM for %{flavornothr}
+AutoReqProv: no
 Group: Application/gridftp
 
 %description %{flavornothr}
