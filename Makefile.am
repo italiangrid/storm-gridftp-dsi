@@ -53,6 +53,7 @@ rpm: dist
 	/bin/cp $(SPEC_FILE) $(RPM_SPEC)
 	cd $(RPM_SPEC); \
 	/usr/bin/rpmbuild  --define "_topdir $(RPM_MAIN_DIR)" -ba $(RPM_SPEC)/$(SPEC_FILE)
+	mkdir -p @DISTSOURCE@ @DISTBIN@
 
 stage:
 	@set fnord $(MAKEFLAGS); amf=$$2; \
@@ -74,10 +75,13 @@ stage:
           $(MAKE) $(AM_MAKEFLAGS) "$$target-am" $$prefix_arg || exit 1; \
         fi; test -z "$$fail"
 
-distsrc: dist
-	mv $(distdir).tar.gz $(DISTTAR)/$(distdir)_src.tar.gz
+distsrc:
+	mkdir -p @DISTSOURCE@
+	cp $(distdir).tar.gz $(DISTSOURCE)/$(distdir).tar.gz
+	cp $(RPM_SRPM)/*.rpm @DISTSOURCE@
 
 distbin:
+	mkdir -p @DISTBIN@
 	@set fnord $(MAKEFLAGS); amf=$$2; \
 	dot_seen=no; \
         target="install"; \
@@ -98,9 +102,10 @@ distbin:
           $(MAKE) $(AM_MAKEFLAGS) "$$target-am" $$prefix_arg || exit 1; \
         fi; test -z "$$fail"; \
 	pushd $$tmpdistbin; \
-	$(AMTAR) -zcf $(DISTTAR)/$(distdir)_bin.tar.gz .; \
+	$(AMTAR) -zcf $(DISTBIN)/$(distdir).tar.gz .; \
 	popd; \
 	rm -rf $$tmpdistbin
+	cp $(RPM_RPM)/*/*.rpm @DISTBIN@
 
 clean-local:
 	rm -f @PACKAGE@-@VERSION@.tar.gz
