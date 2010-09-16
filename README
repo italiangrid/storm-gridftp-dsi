@@ -1,0 +1,50 @@
+*
+*   Author: Elisabetta Ronchieri, Elisabetta.Ronchieri@cnaf.infn.it
+*   Date:   10 June 2010
+*
+
+Prerequisites
+=============
+Before proceding, you have to make sure you have installed and configured
+all prerequisite packages.
+
+globus
+------
+zlib
+zlib-devel
+----------
+libattr
+libattr-devel
+
+
+Building StoRM gridftp-dsi
+==========================
+Download common
+
+svn checkout --username <username> https://svn.forge.cnaf.infn.it/svn/storm/common/trunk common
+
+Download gridftp-dsi
+
+svn checkout --username <username> https://svn.forge.cnaf.infn.it/svn/storm/gridftp-dsi/branches/gridftp-dsi_1.0.x gridftp-dsi
+
+cd gridftp-dsi
+
+./bootstrap
+
+./configure --prefix=<prefix> --with-storm-gridftp-location=<prefix> --with-globus-nothr-flavor=<flavornothr> --with-globus-thr-flavor=<flavorthr> 
+
+make; make install; make rpm
+
+The other configure options are:
+
+--with-globus-prefix=<globus-location> 
+--with-libattr-prefix=<libattr-location> 
+--with-libattr-devel-prefix=<libattr-devel-location> 
+--with-zlib-prefix=<zlib-location> 
+--with-zlib-devel-prefix=<zlib-devel-location>
+
+that you need to specify if they are different by their default values.
+
+For example:
+
+./configure --prefix=/home/joda/tryporting/gridftp-dsi/etics-tmp --with-storm-gridftp-location=/home/joda/tryporting/stage --with-globus-prefix=/home/joda/tryporting/repository/vdt/globus/4.0.7-VDT-1.10.1/sl5_x86_64_gcc412 --with-globus-nothr-flavor=gcc64dbg --with-globus-thr-flavor=gcc64dbgpthr --with-libattr-prefix=/home/joda/tryporting/repository/externals/libattr-devel/2.4.32/sl5_x86_64_gcc412 --with-libattr-devel-prefix=/home/joda/tryporting/repository/externals/libattr-devel/2.4.32/sl5_x86_64_gcc412 --with-zlib-prefix=/home/joda/tryporting/repository/externals/zlib/1.2.3/sl5_x86_64_gcc412 --with-zlib-devel-prefix=/home/joda/tryporting/repository/externals/zlib/1.2.3/sl5_x86_64_gcc412
