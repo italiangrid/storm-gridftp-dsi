@@ -1,116 +1,166 @@
+# Copyright (c) Istituto Nazionale di Fisica Nucleare (INFN). 2006-2010.
 #
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#        http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
-#
-
-#
-# Authors: Vincenzo Vagnoni <vincenzo.vagnoni@bo.infn.it>
-#          Elisabetta Ronchieri <elisabetta.ronchieri@cnaf.infn.it>
-# Version info: $Id: $
-# Release: $Name: $
-#                                                                            # Revision history:
-# $Log: $
-#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 %define name         @PACKAGE@
 %define version      @VERSION@
 %define release      @STORM_GLOBUS_GRIDFTP_AGE_NUMBER@.@STORM_GLOBUS_GRIDFTP_SO@
 
-%define builddir     @RPM_BUILD_DIR@/build-%{name}-%{version}
-
 %define libtype      @LIBTYPE@
 %define globusdir    @GLOBUS_LOCATION@
-%define flavorthr    @GLOBUS_THR_FLAVOR@
-%define flavornothr  @GLOBUS_NOTHR_FLAVOR@
 
 %define libattrdir    @LIBATTR_LOCATION@
 %define libattrdevdir @LIBATTR_DEVEL_LOCATION@
 
-%define zlibdir @ZLIB_LOCATION@
-%define zlibdevdir @ZLIB_DEVEL_LOCATION@
+%define zlibdir      @ZLIB_LOCATION@
+%define zlibdevdir   @ZLIB_DEVEL_LOCATION@
 
 %define stormgridftpdir @STORM_GRIDFTP_LOCATION@
+
+%define prefixname   @PACKAGE_PREFIX_NAME@
+%define shortname    @PACKAGE_SHORT_NAME@
+%define longname     @PACKAGE_LONG_NAME@
 
 Summary:        GridFTP2 DSI for StoRM
 Name:           %{name}
 Version:        %{version}
 Release:        %{release}
-#Vendor:         
-#Copyright:
-License:        Apache
-URL:            http://grid-it.cnaf.infn.it/storm
+Vendor:         EMI
+Packager:       Elisabetta Ronchieri <elisabetta.ronchieri@cnaf.infn.it>
+License:        Apache License, Version 2.0
+URL:            http://storm.forge.cnaf.infn.it
 Source:         @PACKAGE@-%{version}.tar.gz
-Group:          Application/gridftp
-AutoReqProv:    no
-BuildRoot:      %{builddir}
-Packager:       Elisabetta Ronchieri elisabetta.ronchieri@cnaf.infn.it
-Prefix:         /opt/storm/gridftp
+Group:          Applications/Libraries
+AutoReqProv:    yes
+BuildRoot:      %{_builddir}/var/tmp/%{name}-%{version}
+Summary:        The StoRM GridFtp DSI component
+
+BuildRequires: libtool
+BuildRequires: storm-common
+BuildRequires: zlib
+BuildRequires: openssl-devel
+BuildRequires: libattr-devel
+BuildRequires: globus-gridftp-server-devel
+BuildRequires: globus-ftp-control-devel
+BuildRequires: globus-ftp-client-devel
+
+Requires(post):   chkconfig
+Requires(preun):  chkconfig
+Requires(preun):  initscripts
+Requires(postun): initscripts
+
+Requires: globus-gssapi-gsi
+Requires: openssl
+Requires: zlib
+Requires: globus-gridftp-server-progs
 
 %define debug_package %{nil}
 
 %description
-GridFTP2 DSI for StoRM. Calculates checksum on the fly.
-
-%package %{flavornothr}
-Summary: GridFTP2 DSI for StoRM for %{flavornothr}
-AutoReqProv: no
-Group: Application/gridftp
-
-%description %{flavornothr}
-GridFTP2 DSI for StoRM. Calculates checksum on the fly.
+GridFTP2 DSI calculates checksum on the fly for StoRM
 
 %prep
-
 %setup -n @PACKAGE@-%{version}
 
 %build
-./bootstrap
-./configure --prefix=%{prefix} --with-storm-gridftp-location=%{stormgridftpdir} --with-globus-prefix=%{globusdir} --with-globus-nothr-flavor=%{flavornothr} --with-globus-thr-flavor=%{flavorthr} --with-libattr-prefix=%{libattrdir} --with-libattr-devel-prefix=%{libattrdevdir} --with-zlib-prefix=%{zlibdir} --with-zlib-devel-prefix=%{zlibdevdir} 
+./bootstrap emi.storm.common
+./configure --prefix=/usr --sysconfdir=/etc --datadir=/usr/share --localstatedir=/var --with-storm-gridftp-location=%{stormgridftpdir} --with-libattr-prefix=%{libattrdir} --with-libattr-devel-prefix=%{libattrdevdir} --with-zlib-prefix=%{zlibdir} --with-zlib-devel-prefix=%{zlibdevdir} 
 make
 
 %install
 if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
 mkdir -p $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/etc/init.d 
-mkdir -p $RPM_BUILD_ROOT/etc/logrotate.d
-cp -f $RPM_BUILD_ROOT/%{prefix}/etc/init.d/globus-gridftp $RPM_BUILD_ROOT/etc/init.d
-cp -f $RPM_BUILD_ROOT/%{prefix}/etc/logrotate.d/globus-gridftp $RPM_BUILD_ROOT/etc/logrotate.d
-rm -f $RPM_BUILD_ROOT/%{prefix}/%{libtype}/libglobus_gridftp_server_StoRM_%{flavornothr}.la
+rm -f $RPM_BUILD_ROOT/usr/%{libtype}/libglobus_gridftp_server_StoRM.la
+rm -f $RPM_BUILD_ROOT/usr/%{libtype}/libglobus_gridftp_server_StoRM.a
+mkdir -p $RPM_BUILD_ROOT/%{_localstatedir}/log/%{prefixname}
+
+%post
+#during an install, the value of the argument passed in is 1
+#during an unupgrade, the value of the argument passed in is 2
+if [ "$1" = "1" ] ; then
+  echo 'add service to chkconfig'
+  /sbin/chkconfig --add storm-globus-gridftp
+fi;
+if [ "$1" = "2" ] ; then
+  echo "The StoRM GridFtp DSI server has been upgraded but NOT configured yet.
+You need to use yaim to configure the server.
+"
+  echo 'stop service'
+  /sbin/service storm-globus-gridftp stop >/dev/null 2>&1 || :
+fi;
+
+%preun
+#during an upgrade, the value of the argument passed in is 1
+#during an uninstall, the value of the argument passed in is 0
+if [ "$1" = "0" ] ; then
+  echo 'stop service'
+  /sbin/service storm-globus-gridftp stop >/dev/null 2>&1 || :
+  echo 'del service from chkconfig'
+  /sbin/chkconfig --del storm-globus-gridftp
+fi;
+if [ "$1" = "1" ] ; then
+  echo "The StoRM GridFtp DSI server has been upgraded but NOT configured yet.
+You need to use yaim to configure the server.
+"
+  echo 'stop service'
+  /sbin/service storm-globus-gridftp stop >/dev/null 2>&1 || :
+fi;
+
+%postun
+#during an upgrade, the value of the argument passed in is 1
+#during an uninstall, the value of the argument passed in is 0
+if [ "$1" = "1" ] ; then
+  echo "The StoRM GridFtp DSI server has been upgraded but NOT configured yet.
+You need to use yaim to configure the server.
+"
+  echo 'stop service'
+  /sbin/service storm-globus-gridftp stop >/dev/null 2>&1 || :
+fi;
+if [ "$1" = "0" ] ; then
+  echo 'remove old file'
+  rm -f /etc/init.d/storm-globus-gridftp.*
+fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files %{flavornothr}
-%defattr(755,root,root)
-/etc/init.d/globus-gridftp
-%{prefix}/etc/init.d/globus-gridftp
+%files 
 %defattr(-,root,root)
-/etc/logrotate.d/globus-gridftp
-%{prefix}/etc/logrotate.d/globus-gridftp
-%{prefix}/%{libtype}/libglobus_gridftp_server_StoRM_%{flavornothr}.a
-%{prefix}/%{libtype}/libglobus_gridftp_server_StoRM_%{flavornothr}.so
-%{prefix}/%{libtype}/libglobus_gridftp_server_StoRM_%{flavornothr}.so.0
-%{prefix}/%{libtype}/libglobus_gridftp_server_StoRM_%{flavornothr}.so.0.0.0
-%doc %{prefix}/share/doc/%{name}-%{version}/LICENSE
+%{_sysconfdir}/init.d/storm-globus-gridftp
+%config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/storm-globus-gridftp
+
+/usr/%{libtype}/libglobus_gridftp_server_StoRM.so
+/usr/%{libtype}/libglobus_gridftp_server_StoRM.so.0
+/usr/%{libtype}/libglobus_gridftp_server_StoRM.so.0.0.0
+
+%doc %dir %{_datadir}/doc/%{name}-%{version}
+%doc %{_datadir}/doc/%{name}-%{version}/ChangeLog
+%doc %{_datadir}/doc/%{name}-%{version}/CREDITS
+%doc %{_datadir}/doc/%{name}-%{version}/LICENSE
+%doc %{_datadir}/doc/%{name}-%{version}/README
+
+%dir %{_localstatedir}/log/%{prefixname}
 
 %changelog
-* Fri Jul 07 2010 Elisabetta Roncheiri
-- Renamed start up script
-- Added logrotate script
-- Updated handling of library
+* Mon May 02 2011 Elisabetta Roncheiri <elisabetta.ronchieri@cnaf.infn.it> - 1.1.0-5.sl5
+- Added BuildRequires in spec file
+- Added src in the src tar file
+- Cleaned configuration file
 
-* Fri Jun 11 2010 Elisabetta Roncheiri
-- Changed the structure of the component
-- Adopted autotool
-- Introduced checks for architecture and location of rpm dir
+* Thu Apr 07 2011 Elisabetta Ronchieri> <elisabetta.ronchieri@cnaf.infn.it> - 1.1.0-4.sl5
+- Renamed globus-gridftp in storm-globus-gridftp
+- Changed log path and log file names
+
+* Fri Feb 24 2011 Elisabetta Ronchieri> <elisabetta.ronchieri@cnaf.infn.it> - 1.1.0-2.sl5
+- Added Fedora guidelines

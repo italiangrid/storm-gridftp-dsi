@@ -1,30 +1,31 @@
+# Copyright (c) Istituto Nazionale di Fisica Nucleare (INFN). 2006-2010.
 #
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#        http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
-#
-
-#
-# Authors: Elisabetta Ronchieri <elisabetta.ronchieri@cnaf.infn.it>
-#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 EXTRA_DIST = \
     bootstrap \
+    ChangeLog \
+    README \
     LICENSE \
+    CREDITS \
     storm-globus-gridftp.spec.in \
     project
 
 docdir = $(datadir)/doc/@PACKAGE@-@VERSION@
-doc_DATA = LICENSE
+doc_DATA = LICENSE \
+        CREDITS \
+        ChangeLog \
+        README
 
 ## Subdirectories list
 SUBDIRS = src config
@@ -32,13 +33,14 @@ SUBDIRS = src config
 ## Default flags to run aclocal
 ACLOCAL_AMFLAGS = -I project -I config
 
-CLEANFILES = storm-globus-gridftp.spec
+CLEANFILES = \
+    storm-globus-gridftp.spec 
 
 MAINTAINERCLEANFILES = Makefile.in
 
 SPEC_FILE = storm-globus-gridftp.spec
 
-RPM_MAIN_DIR = @RPM_DIR@/rpm
+RPM_MAIN_DIR = $(PWD)/rpm
 RPM_TMP_DIR = $(RPM_MAIN_DIR)/tmp
 RPM_SOURCE = $(RPM_MAIN_DIR)/SOURCES
 RPM_SPEC = $(RPM_MAIN_DIR)/SPECS
@@ -52,7 +54,7 @@ rpm: dist
 	/bin/cp -u @PACKAGE@-@VERSION@.tar.gz $(RPM_SOURCE)
 	/bin/cp $(SPEC_FILE) $(RPM_SPEC)
 	cd $(RPM_SPEC); \
-	/usr/bin/rpmbuild  --define "_topdir $(RPM_MAIN_DIR)" -ba $(RPM_SPEC)/$(SPEC_FILE)
+	/usr/bin/rpmbuild  --define "_topdir $(RPM_MAIN_DIR)" --nodeps -ba $(RPM_SPEC)/$(SPEC_FILE)
 	mkdir -p @DISTSOURCE@ @DISTBIN@
 
 stage:
@@ -77,7 +79,8 @@ stage:
 
 distsrc:
 	mkdir -p @DISTSOURCE@
-	cp $(distdir).tar.gz $(DISTSOURCE)/$(distdir).tar.gz
+	mv $(distdir).tar.gz $(distdir).src.tar.gz
+	cp $(distdir).src.tar.gz $(DISTSOURCE)/$(distdir).src.tar.gz
 	cp $(RPM_SRPM)/*.rpm @DISTSOURCE@
 
 distbin:

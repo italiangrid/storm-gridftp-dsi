@@ -1,0 +1,149 @@
+#! /bin/bash
+#
+# storm-globus-gridftp Init file for the Globus Gridftp server
+# Original Author: Shu-Ting Liao
+# This version based on Fedora by Andrew Elwell <andrew.elwell@cern.ch>
+
+# chkconfig: 345 85 10
+# description: This shell script takes care of starting and stopping
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+###############  Standard Globus configuration  ######################
+
+GLOBUS_SYSCONFIG=${GLOBUS_SYSCONFIG:-/etc/sysconfig/globus}
+if [ -f "$GLOBUS_SYSCONFIG" ]; then
+    . "$GLOBUS_SYSCONFIG"
+fi
+
+GRIDFTP_SYSCONFIG=${GRIDFTP_SYSCONFIG:-/etc/sysconfig/globus-gridftp}
+if [ -f "$GRIDFTP_SYSCONFIG" ]; then
+    . "$GRIDFTP_SYSCONFIG"
+fi
+
+if [ -n "$GLOBUS_TCP_PORT_RANGE" ]; then
+  export GLOBUS_TCP_PORT_RANGE
+fi
+
+if [ -n "$GLOBUS_UDP_PORT_RANGE" ]; then
+  export GLOBUS_UDP_PORT_RANGE
+fi
+
+###############  Standard StoRM configuration  ######################
+
+STORM_GRIDFTP_DSI_LOCATION=${STORM_GRIDFTP_DSI_LOCATION:-/usr}
+if [ ! -d "$STORM_GRIDFTP_DSI_LOCATION" ]; then
+  echo "STORM_GRIDFTP_DSI_LOCATION not found"
+  exit 1
+fi
+export STORM_GRIDFTP_DSI_LOCATION
+
+###############
+
+umask=${umask:-022}
+
+RETVAL=0
+exec="/usr/sbin/globus-gridftp-server"
+prog="globus-gridftp-server"
+config="/etc/grid-security/gridftp.conf"
+
+lockfile="/var/lock/subsys/$prog"
+
+GLITE_ENVSCRIPT=${GLITE_ENVSCRIPT:-/etc/profile.d/grid-env.sh}
+if [ -f "$GLITE_ENVSCRIPT" ]; then
+    . "$GLITE_ENVSCRIPT"
+fi
+
+if [ -z "$GRIDFTP_WITH_DSI" ] || [ "x${GRIDFTP_WITH_DSI}" == "xno" ]; then
+    STORM_GRIDFTP_DSI=""
+else
+    STORM_GRIDFTP_DSI="-dsi StoRM -allowed-modules StoRM"
+fi
+
+start() {
+    [ -x $exec ] || exit 5
+    [ -f $config ] || exit 6
+
+    if [ "x${STORM_GRIDFTP_DSI}" != "x" ]; then
+          LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$STORM_GRIDFTP_DSI_LOCATION/lib64
+    fi
+    export LD_LIBRARY_PATH
+
+    echo -n $"Starting $prog: "
+    daemon sh -c "'umask $umask; $exec -p 2811 -S \
+        -d ${GRIDFTP_LOG_LEVELS:-error,warn,info} \
+        -l ${GRIDFTP_SESSION_LOG:-/var/log/storm/storm-gridftp-session.log} \
+        -Z ${GRIDFTP_TRANSFER_LOG:-/var/log/storm/storm-globus-gridftp.log} \
+        ${STORM_GRIDFTP_DSI}'"
+      RETVAL=$?
+    retval=$?
+    echo
+    [ $retval -eq 0 ] && touch $lockfile
+    return $retval
+}
+
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc $prog
+    retval=$?
+    echo
+    [ $retval -eq 0 ] && rm -f $lockfile
+    return $retval
+}
+
+restart() {
+    stop
+    start
+}
+
+reload() {
+    restart
+}
+
+force_reload() {
+    restart
+}
+
+rh_status() {
+    # run checks to determine if the service is running or use generic status
+    status $prog
+}
+
+rh_status_q() {
+    rh_status >/dev/null 2>&1
+}
+
+case "$1" in
+    start)
+        rh_status_q && exit 0
+        $1
+        ;;
+    stop)
+        rh_status_q || exit 0
+        $1
+        ;;
+    restart)
+        $1
+        ;;
+    reload)
+        rh_status_q || exit 7
+        $1
+        ;;
+    force-reload)
+        force_reload
+        ;;
+    status)
+        rh_status
+        ;;
+    condrestart|try-restart)
+        rh_status_q || exit 0
+        restart
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload}"
+        exit 2
+esac
+exit $?
+

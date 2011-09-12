@@ -2,7 +2,7 @@
 # Log rotation of GridFTP logs
 #
 
-/var/log/globus-gridftp.log {
+@localstatedir@/log/@PACKAGE_PREFIX_NAME@/storm-globus-gridftp.log {
     compress
     daily
     delaycompress
@@ -10,7 +10,7 @@
     rotate 90
 }
 
-/var/log/gridftp-session.log {
+@localstatedir@/log/@PACKAGE_PREFIX_NAME@/storm-gridftp-session.log {
     compress
     daily
     delaycompress

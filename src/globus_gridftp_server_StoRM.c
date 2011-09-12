@@ -345,7 +345,7 @@ static void globus_l_gfs_file_net_read_cb(globus_gfs_operation_t op, globus_resu
            }
            globus_free(checksum_array);
            free_checksum_list(StoRM_handle->checksum_list);
-           sprintf(ckSumbuf,"%lx",file_checksum);
+           sprintf(ckSumbuf,"%08lx",file_checksum);
 
            fsetxattr(StoRM_handle->fd,"user.storm.checksum.adler32",ckSumbuf,strlen(ckSumbuf),0);
         }

@@ -17,11 +17,11 @@
 # Authors: Elisabetta Ronchieri <elisabetta.ronchieri@cnaf.infn.it>
 #
 
-EXTRA_DIST = globus-gridftp.in
+EXTRA_DIST = storm-globus-gridftp.in
 
 gdsidir = $(sysconfdir)/logrotate.d
-gdsi_SCRIPTS = globus-gridftp
+gdsi_SCRIPTS = storm-globus-gridftp
 
-CLEANFILES = globus-gridftp
+CLEANFILES = storm-globus-gridftp
 
 MAINTAINERCLEANFILES = Makefile.in *~ *.*~

@@ -1,0 +1,25 @@
+2011-05-02 Elisabetta Roncheiri <elisabetta.ronchieri@cnaf.infn.it>
+
+    * Added BuildRequires in spec file
+    * Added src in the src tar file
+    * Cleaned configuration file
+
+2011-04-07 Elisabetta Roncheiri <elisabetta.ronchieri@cnaf.infn.it>
+
+    * Renamed globus-gridftp in storm-globus-gridftp
+    * Changed log path and log file names
+
+2011-02-23 Elisabetta Roncheiri <elisabetta.ronchieri@cnaf.infn.it>
+
+    * Used Fedora guidelines
+
+2011-02-18 Elisabetta Roncheiri <elisabetta.ronchieri@cnaf.infn.it>
+
+    * Changed name of packages
+
+2010-09-20  Elisabetta Ronchieri  <elisabetta.ronchieri@cnaf.infn.it>
+
+    * included Copyright in all files
+    * added CREDITS file
+    * added README containing notes for build
+    * updated spec file to handle CREDITS and ChangeLog
