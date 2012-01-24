@@ -85,7 +85,7 @@ distsrc:
 
 distbin: stage
 	mkdir -p @DISTBIN@
-	cd etics-tmp; tar -zcf $(distdir).noarch.tar.gz etc usr var; cp $(distdir).noarch.tar.gz @DISTBIN@/$(distdir)-@STORM_GLOBUS_GRIDFTP_AGE_NUMBER@.@STORM_GLOBUS_GRIDFTP_SO@.noarch.tar.gz; cd ..; \
+	cd etics-tmp; tar -zcf $(distdir).noarch.tar.gz etc usr; cp $(distdir).noarch.tar.gz @DISTBIN@/$(distdir)-@STORM_GLOBUS_GRIDFTP_AGE_NUMBER@.@STORM_GLOBUS_GRIDFTP_SO@.noarch.tar.gz; cd ..; \
 	cp $(RPM_RPM)/*/*.rpm @DISTBIN@
 
 clean-local:
