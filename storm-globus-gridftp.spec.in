@@ -73,7 +73,7 @@ GridFTP2 DSI calculates checksum on the fly for StoRM
 %setup -n @PACKAGE@-%{version}
 
 %build
-./bootstrap emi.storm.common
+./bootstrap
 ./configure --prefix=/usr --sysconfdir=/etc --datadir=/usr/share --localstatedir=/var --with-storm-gridftp-location=%{stormgridftpdir} --with-libattr-prefix=%{libattrdir} --with-libattr-devel-prefix=%{libattrdevdir} --with-zlib-prefix=%{zlibdir} --with-zlib-devel-prefix=%{zlibdevdir} 
 make
 
