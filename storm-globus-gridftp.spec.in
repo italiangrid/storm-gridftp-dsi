@@ -45,6 +45,8 @@ AutoReqProv:    yes
 BuildRoot:      %{_builddir}/var/tmp/%{name}-%{version}
 Summary:        The StoRM GridFtp DSI component
 
+BuildRequires: automake
+BuildRequires: autoconf
 BuildRequires: libtool
 BuildRequires: storm-common
 BuildRequires: zlib
