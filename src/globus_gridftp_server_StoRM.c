@@ -186,7 +186,8 @@ static void globus_l_gfs_StoRM_destroy(void *user_arg) {
 static void globus_l_gfs_StoRM_stat(globus_gfs_operation_t op, globus_gfs_stat_info_t *stat_info, void *user_arg) {
     globus_gfs_stat_t *stat_array;
     int stat_count;
-    globus_l_gfs_StoRM_handle_t *StoRM_handle;
+    // Commented the following set to fix the build on centos7
+    //globus_l_gfs_StoRM_handle_t *StoRM_handle;
     
     char *func="globus_l_gfs_StoRM_stat";
     struct stat64 statbuf;
@@ -196,7 +197,8 @@ static void globus_l_gfs_StoRM_stat(globus_gfs_operation_t op, globus_gfs_stat_i
     
     GlobusGFSName(globus_l_gfs_StoRM_stat);
 
-    StoRM_handle = (globus_l_gfs_StoRM_handle_t *) user_arg;
+    // Commented the following set to fix the build on centos7
+    //StoRM_handle = (globus_l_gfs_StoRM_handle_t *) user_arg;
     
     pathname = strdup(stat_info->pathname);
         
@@ -247,12 +249,14 @@ static void globus_l_gfs_StoRM_stat(globus_gfs_operation_t op, globus_gfs_stat_i
  *      GLOBUS_GFS_CMD_SITE_DSI
  ************************************************************************/
 static void globus_l_gfs_StoRM_command(globus_gfs_operation_t op, globus_gfs_command_info_t *cmd_info, void *user_arg) {
-    globus_l_gfs_StoRM_handle_t *     StoRM_handle;
+    // Commented the following set to fix the build on centos7
+    //globus_l_gfs_StoRM_handle_t *     StoRM_handle;
     globus_result_t                     result;
     
     
     GlobusGFSName(globus_l_gfs_StoRM_command);
-    StoRM_handle = (globus_l_gfs_StoRM_handle_t *) user_arg;
+    // Commented the following set to fix the build on centos7
+    //StoRM_handle = (globus_l_gfs_StoRM_handle_t *) user_arg;
 
     result=GlobusGFSErrorGeneric("error: commands denied");
     globus_gridftp_server_finished_command(op, result, GLOBUS_NULL);
