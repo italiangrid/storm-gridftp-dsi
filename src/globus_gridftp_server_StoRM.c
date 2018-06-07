@@ -351,8 +351,18 @@ static void globus_l_gfs_file_net_read_cb(globus_gfs_operation_t op, globus_resu
            free_checksum_list(StoRM_handle->checksum_list);
            sprintf(ckSumbuf,"%08lx",file_checksum);
 
+           if (fsync(StoRM_handle->fd)) {
+               StoRM_handle->cached_res = GLOBUS_FAILURE;
+               globus_gfs_log_message(GLOBUS_GFS_LOG_ERR,"%s: fsync error \n",func);
+               StoRM_handle->done = GLOBUS_TRUE;
+               close(StoRM_handle->fd);
+               globus_mutex_unlock(&StoRM_handle->mutex);
+               return;
+           }
+
            fsetxattr(StoRM_handle->fd,"user.storm.checksum.adler32",ckSumbuf,strlen(ckSumbuf),0);
         }
+
         close(StoRM_handle->fd);
 			
         globus_gridftp_server_finished_transfer(op, StoRM_handle->cached_res);

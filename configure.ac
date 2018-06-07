@@ -13,7 +13,7 @@
 # limitations under the License.
 
 AC_PREREQ(2.57)
-AC_INIT([storm globus gridftp server], [1.2.0], [vincenzo.vagnoni@bo.infn.it])
+AC_INIT([storm globus gridftp server], [1.2.1], [vincenzo.vagnoni@bo.infn.it])
 AC_CONFIG_AUX_DIR([./project])
 AC_CONFIG_SRCDIR([src/dsi_StoRM.h])
 AM_INIT_AUTOMAKE
