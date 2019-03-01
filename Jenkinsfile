@@ -1,38 +1,32 @@
 #!/usr/bin/env groovy
 
-def build(nodeLabel) {
-  node("${nodeLabel}") {
-    deleteDir()
-    unstash 'code'
-    sh './bootstrap'
-    sh './configure'
-    sh 'make'
-  }
-}
-
 pipeline {
-    agent none
+    agent {
+      kubernetes {
+        cloud 'Kube mwdevel'
+          label 'build'
+          containerTemplate {
+            name 'builder'
+              image 'italiangrid/storm-build:centos6'
+              ttyEnabled true
+              command 'cat'
+          }
+      }
+    }
+
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
         timeout(time: 1, unit: 'HOURS')
     }
-    triggers { cron('@daily') }
-    stages {
-        stage('prepare') {
-            agent { label 'generic' }
-            steps {
-                deleteDir()
-                checkout scm
-                stash name: 'code'
-            }
-        }
-        stage('build') {
 
+    triggers { cron('@daily') }
+
+    stages {
+        stage('build') {
             steps {
-                parallel(
-                    "build-umd3": { build("centos6-umd3") },
-                    "build-umd4": { build("centos6-umd4") }
-                )
+              sh './bootstrap'
+              sh './configure'
+              sh 'make'
             }
         }
         stage('result') {
