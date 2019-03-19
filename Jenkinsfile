@@ -1,17 +1,14 @@
 #!/usr/bin/env groovy
 
 pipeline {
+
     agent {
-      kubernetes {
-        cloud 'Kube mwdevel'
-          label 'build'
-          containerTemplate {
-            name 'builder'
-              image 'italiangrid/storm-build:centos6'
-              ttyEnabled true
-              command 'cat'
-          }
-      }
+        kubernetes {
+            label "build-storm-gridftp-dsi-${env.BUILD_NUMBER}"
+            cloud 'Kube mwdevel'
+            defaultContainer 'jnlp'
+            yamlFile 'jenkins/pod.yaml'
+        }
     }
 
     options {
@@ -22,11 +19,15 @@ pipeline {
     triggers { cron('@daily') }
 
     stages {
-        stage('build') {
+        stage('Run') {
             steps {
-              sh './bootstrap'
-              sh './configure'
-              sh 'make'
+                container('kube-storm-build') {
+		    script {
+                        sh './bootstrap'
+                        sh './configure'
+                        sh 'make'
+                    }
+                }
             }
         }
         stage('result') {
