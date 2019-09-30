@@ -1,0 +1,11 @@
+[Unit]
+Description=StoRM Globus GridFTP service
+
+[Service]
+User=root
+Type=forking
+ExecStart=/usr/sbin/globus-gridftp-server -S
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
