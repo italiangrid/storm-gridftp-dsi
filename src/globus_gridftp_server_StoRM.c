@@ -203,6 +203,8 @@ static void globus_l_gfs_StoRM_stat(globus_gfs_operation_t op, globus_gfs_stat_i
     pathname = strdup(stat_info->pathname);
         
     globus_gfs_log_message(GLOBUS_GFS_LOG_DUMP,"%s: pathname: %s\n",func,pathname);
+
+    
     
     status=stat64(pathname,&statbuf);
     if(status!=0) {
@@ -251,16 +253,92 @@ static void globus_l_gfs_StoRM_stat(globus_gfs_operation_t op, globus_gfs_stat_i
 static void globus_l_gfs_StoRM_command(globus_gfs_operation_t op, globus_gfs_command_info_t *cmd_info, void *user_arg) {
     // Commented the following set to fix the build on centos7
     //globus_l_gfs_StoRM_handle_t *     StoRM_handle;
-    globus_result_t                     result;
-    
-    
+
+    globus_result_t result; 
+
+    size_t cksm_size;
+ 
+    char cksm_value[9];
+    cksm_value[8]='\0';   
+
+    struct stat64 statbuf;
+
+    unsigned long adler;
+ 
+    off_t tlen;
+
+    unsigned int len;
+
+    #define ADLER32_BUFSIZE 4194304
+
+    globus_byte_t  buf[ADLER32_BUFSIZE];
+
+    int fd;
+
     GlobusGFSName(globus_l_gfs_StoRM_command);
     // Commented the following set to fix the build on centos7
     //StoRM_handle = (globus_l_gfs_StoRM_handle_t *) user_arg;
 
-    result=GlobusGFSErrorGeneric("error: commands denied");
+    if(cmd_info->command == GLOBUS_GFS_CMD_CKSM) {
+
+      globus_gfs_log_message(GLOBUS_GFS_LOG_INFO,"Checksum requested for file %s\n",cmd_info->pathname);
+
+      if(stat64(cmd_info->pathname,&statbuf)) {
+        globus_gfs_log_message(GLOBUS_GFS_LOG_ERR,"Error: Cannot stat file %s\n",cmd_info->pathname);
+        result=GlobusGFSErrorGeneric("Error: checksum command failed\n");
+        globus_gridftp_server_finished_command(op, result, GLOBUS_NULL);
+        return;
+      }
+
+      cksm_size = getxattr(cmd_info->pathname, "user.storm.checksum.adler32", cksm_value, 8);
+
+      if(cksm_size == 8) {
+        globus_gfs_log_message(GLOBUS_GFS_LOG_INFO,"Checksum retrieved %s\n",cksm_value);
+        globus_gridftp_server_finished_command(op, GLOBUS_SUCCESS, cksm_value);
+        return;   
+      }
+
+      globus_gfs_log_message(GLOBUS_GFS_LOG_INFO,"Cannot retrieve stored checksum for file %s. Trying to calculate it\n",cmd_info->pathname);
+
+      fd = open(cmd_info->pathname,O_RDONLY);
+      if(fd == -1) {
+        globus_gfs_log_message(GLOBUS_GFS_LOG_ERR,"Error: Cannot open file %s\n",cmd_info->pathname);
+        result=GlobusGFSErrorGeneric("Error: checksum command failed\n");
+        globus_gridftp_server_finished_command(op, result, GLOBUS_NULL);
+        return;
+      }
+
+      adler = adler32(0L, Z_NULL, 0);
+      tlen = 0;
+      while ((len = read(fd, buf, ADLER32_BUFSIZE)) > 0) {
+        adler = adler32(adler, buf, len);
+        tlen+=len;
+      }
+
+      if(tlen != statbuf.st_size) {
+        globus_gfs_log_message(GLOBUS_GFS_LOG_ERR,"Error: File truncated while reading file %s\n",cmd_info->pathname);
+        result=GlobusGFSErrorGeneric("Error: checksum command failed\n");
+        globus_gridftp_server_finished_command(op, result, GLOBUS_NULL);
+        return;
+      }
+
+      sprintf(cksm_value,"%08lx",adler);
+
+      if(fsetxattr(fd,"user.storm.checksum.adler32",cksm_value,strlen(cksm_value),0)) {
+        globus_gfs_log_message(GLOBUS_GFS_LOG_ERR,"Achtung: cannot store checksum for file %s\n",cmd_info->pathname);
+      }
+
+      close(fd);
+
+      globus_gfs_log_message(GLOBUS_GFS_LOG_INFO,"Checksum calculated %s\n",cksm_value);      
+
+      globus_gridftp_server_finished_command(op, GLOBUS_SUCCESS, cksm_value);
+      return;
+    }
+
+    result=GlobusGFSErrorGeneric("Error: command denied");
     globus_gridftp_server_finished_command(op, result, GLOBUS_NULL);
-    return;
+    return; 
 }
  
 static void globus_l_gfs_file_net_read_cb(globus_gfs_operation_t op, globus_result_t result, globus_byte_t *buffer, globus_size_t nbytes, globus_off_t offset, globus_bool_t eof, void *user_arg) {
@@ -351,8 +429,19 @@ static void globus_l_gfs_file_net_read_cb(globus_gfs_operation_t op, globus_resu
            free_checksum_list(StoRM_handle->checksum_list);
            sprintf(ckSumbuf,"%08lx",file_checksum);
 
+           if (fsync(StoRM_handle->fd)) {
+               StoRM_handle->cached_res = GLOBUS_FAILURE;
+               globus_gfs_log_message(GLOBUS_GFS_LOG_ERR,"%s: fsync error \n",func);
+               StoRM_handle->done = GLOBUS_TRUE;
+               close(StoRM_handle->fd);
+               globus_mutex_unlock(&StoRM_handle->mutex);
+               return;
+           }
+
            fsetxattr(StoRM_handle->fd,"user.storm.checksum.adler32",ckSumbuf,strlen(ckSumbuf),0);
+
         }
+
         close(StoRM_handle->fd);
 			
         globus_gridftp_server_finished_transfer(op, StoRM_handle->cached_res);
