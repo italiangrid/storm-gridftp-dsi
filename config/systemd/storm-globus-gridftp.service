@@ -2,6 +2,7 @@
 Description=StoRM Globus GridFTP service
 
 [Service]
+EnvironmentFile=-/etc/sysconfig/storm-globus-gridftp
 User=root
 Type=forking
 ExecStart=/usr/sbin/globus-gridftp-server -S
