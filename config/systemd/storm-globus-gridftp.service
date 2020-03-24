@@ -6,7 +6,7 @@ EnvironmentFile=-/etc/sysconfig/storm-globus-gridftp
 User=root
 Type=forking
 ExecStart=/usr/sbin/globus-gridftp-server -S
-KillMode=process
+KillMode=control-group
 
 [Install]
 WantedBy=multi-user.target
