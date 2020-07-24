@@ -536,16 +536,6 @@ static void globus_l_gfs_StoRM_recv(globus_gfs_operation_t op, globus_gfs_transf
       return;
     }
 
-    if (statbuf.st_size > 0) {
-      globus_gfs_log_message(GLOBUS_GFS_LOG_ERR,
-                             "file %s already exists and is not empty\n",
-                             pathname);
-      result = GlobusGFSErrorGeneric("file already exists and is not empty");
-      globus_gridftp_server_finished_transfer(op, result);
-      free(pathname);
-      return;
-    }
-
     flags = O_WRONLY | O_CREAT;
     if(transfer_info->truncate) flags |= O_TRUNC;
     
