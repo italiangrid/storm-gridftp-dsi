@@ -511,6 +511,7 @@ static void globus_l_gfs_StoRM_recv(globus_gfs_operation_t op, globus_gfs_transf
     char *func="globus_l_gfs_StoRM_recv";
     char *pathname;
     int flags;
+    struct stat64 statbuf;
     
     GlobusGFSName(globus_l_gfs_StoRM_recv);
     StoRM_handle = (globus_l_gfs_StoRM_handle_t *) user_arg;
@@ -526,6 +527,25 @@ static void globus_l_gfs_StoRM_recv(globus_gfs_operation_t op, globus_gfs_transf
     }
     globus_gfs_log_message(GLOBUS_GFS_LOG_DUMP,"%s: pathname: %s \n",func,pathname);
     
+    if (stat64(pathname, &statbuf) < 0) {
+      globus_gfs_log_message(GLOBUS_GFS_LOG_ERR, "cannot stat file %s\n",
+                             pathname);
+      result = globus_l_gfs_make_error("stat64");
+      globus_gridftp_server_finished_transfer(op, result);
+      free(pathname);
+      return;
+    }
+
+    if (statbuf.st_size > 0) {
+      globus_gfs_log_message(GLOBUS_GFS_LOG_ERR,
+                             "file %s already exists and is not empty\n",
+                             pathname);
+      result = GlobusGFSErrorGeneric("file already exists and is not empty");
+      globus_gridftp_server_finished_transfer(op, result);
+      free(pathname);
+      return;
+    }
+
     flags = O_WRONLY | O_CREAT;
     if(transfer_info->truncate) flags |= O_TRUNC;
     
